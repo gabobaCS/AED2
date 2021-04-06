@@ -1,0 +1,47 @@
+TAD Partida
+	Igualdad Observacional:
+	Generos: partida
+	Exporta: partida, observadores, generadores, 
+	Usa: Bool, Nat, jugador //, mapa	
+	Observadores Basicos:
+		ganada: partida -> bool  		{tiene que haber comenzado}
+		perdida: partida -> bool  		{tiene que haber comenzado}
+		jugador: partida -> jugador  
+		// jugador: partida -> tupla(nat)  (posicion actual del jugador)
+		 
+	Generadores:
+		iniciarPartida: jugador -> partida  
+		//agregar jugador a mapa en Punto de Inicio
+		//agregar fantasmas a mapa
+		
+		
+		
+	Otras Operaciones:
+		dondeEstaEljugador?: partida × jugador -> posicion  
+		distanciaManhhatan: posicion × posicion ->  nat
+		estaASalvo?: conj(posicion) × jugador -> bool
+		
+	Axiomas:
+	
+	distanciaManhattan(p1, p2) ≡ abs(π1(p1) - π1(p2)) + abs( π2(p1) - π2(p2))
+
+	estaASalvo?( conj(posicion) f, jugador ) ≡ //π1(dondeEstaEljugador?(partida, jugador))-π1( dameUno(f) ) ) + abs( π2(dondeEstaEljugador?(partida, jugador))-π2( dameUno(f) )
+	if Ø?( f )
+	then
+			true
+	else
+		if distanciaManhattan(dameUno(f), jugador ) < 3
+		then
+			false //Por ende se pierde***********************
+		else
+			estaASalvo?( sinUno(f), jugador )
+		fi
+	fi
+	
+	ganada(iniciarPartida) ≡ false
+	perdida(iniciarPartida) ≡ false
+	perdida()
+	ganada(subir) ≡ 
+	
+	ganada()
+Fin TAD

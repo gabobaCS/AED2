@@ -1,0 +1,43 @@
+TAD Jugador
+	Igualdad Observacional:
+	Generos: jugador
+	Exporta: jugador, observadores, generadores, 
+	Usa: Bool, Nat, mapa
+	
+	Observadores Basicos:
+		movimientos: jugador -> secu(posicion)
+		mapa: jugador -> mapa
+		sigueJugando: jugador -> bool
+	
+	Generadores:
+		ubicar: mapa -> jugador
+		subir: jugador j × mapa m -> jugador	    
+		                          {¬(perdido ∧ ¬(π2(ultimaPos(j)) = 0) ∧ ultimaPos(j) ∉ paredes(m)}
+		bajar: jugador j × mapa m -> jugador   
+		                          {¬(perdido ∧ ¬(π2(ultimaPos(j)) = alto(m)) ∧ ultimaPos(j) ∉ paredes(m)}
+		izquierda: jugador j × mapa m -> jugador	
+		                          {¬(perdido ∧ ¬(π1(ultimaPos(j)) = 0) ∧ ultimaPos(j) ∉ paredes(m)}
+		derecha: jugador j × mapa m -> jugador 	
+		                          {¬(perdido ∧ ¬(π1(ultimaPos(j)) = ancho(m)) ∧ ultimaPos(j) ∉ paredes(m)}
+		
+	Otras Operaciones:
+		ultimaPos: jugador -> posicion
+		
+	Axiomas:
+		movimientos(ubicar(mapa)) ≡ <inicio(mapa)>
+		movimientos(subir(jugador)) ≡ 	(π1(ultimaPos(jugador)), π2(ultimaPos(jugador) + 1)) • movimientos(jugador)
+		movimientos(bajar(jugador)) ≡   (π1(ultimaPos(jugador)), π2(ultimaPos(jugador) - 1)) • movimientos(jugador)
+		movimientos(izquierda(jugador)) ≡ (π1(ultimaPos(jugador)) - 1, π2(ultimaPos(jugador))) • movimientos(jugador)
+		movimientos(derecha(jugador)) ≡ (π1(ultimaPos(jugador)) + 1, π2(ultimaPos(jugador))) • movimientos(jugador)
+		
+		
+		
+Fin TAD
+
+
+  [0, 0, 0, 0]
+	[0, 0, 0, 0]  
+	[1, 1, 0, -]
+	[e, 1, 0, 0]
+	[1, 1, 0, 0]
+	[0, 0, 0, 0]

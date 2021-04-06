@@ -1,33 +1,34 @@
-TAD Tablero 
+TAD Mapa 
 	Igualdad Observacional:
-	Generos: tablero
-	Exporta: tablero, observadores, generadores, posicion, conj(α)
+	Generos: mapa
+	Exporta: mapa, observadores, generadores, posicion, conj(α)
 	Usa: Bool, Nat, posicion
 	
 	Observadores Basicos:
-		// esVacio: tablero -> bool
-		inicio: tablero -> posicion
-		final: tablero -> posicion
-		fantasmas: tablero -> conj(posicion)
-		// pacman: tablero -> posicion
-		paredes: tablero -> conj(posicion)
-		alto: tablero -> nat
-		ancho: tablero -> nat
+		// esVacio: mapa -> bool
+		inicio: mapa -> posicion
+		final: mapa -> posicion
+		fantasmas: mapa -> conj(posicion)
+		// pacman: mapa -> posicion
+		paredes: mapa -> conj(posicion)
+		alto: mapa -> nat
+		ancho: mapa -> nat
 		
 	Generadores:
 	
-		// nuevoPacman:	inicio -> tablero
+		// nuevoPacman:	inicio -> mapa
 		
-		// tableroVacio: -> tablero
-		// agregarFila: nat -> tablero
+		// mapaVacio: -> mapa
+		// agregarFila: nat -> mapa
 		
-		//PREGUNTAR SI TABLERO VACIO ESTÁ BIEN.
-		tableroVacio: nat a × nat b × posicion i × posicion f -> tablero  {¬(i = f) ∧ πi) <= a ∧ π2(f) <= b)(tablero) < b y }
-		agregarFantasma: posicion p × tablero t -> tablero
-												{posicionValida ∧ ¬esPared(p, t) ∧ ¬esFantasma(p, t) ∧ ¬(p = inicio(t))
+		//PREGUNTAR SI mapa VACIO ESTÁ BIEN.
+		
+		mapaVacio: nat a × nat b × posicion i × posicion f -> mapa  {¬(i = f) ∧ π1(i) <= a ∧ π2(i) <= b ∧ π1(f) <= a ∧ π2(f) <= b)}
+		agregarFantasma: posicion p × mapa t -> mapa
+												{posicionValida(p) ∧ ¬esPared(p, t) ∧ ¬(p = inicio(t))
 												∧ ¬(p = final(t))}
-		agregarPared: posicion × tablero -> tablero 
-		                    {posicionValida ∧ ¬esPared(p, t) ∧ ¬esFantasma(p, t) ∧ ¬(p = inicio(t))
+		agregarPared: posicion p × mapa t -> mapa
+		                    {posicionValida(p) ∧ ¬esFantasma(p, t) ∧ ¬(p = inicio(t))
 												∧ ¬(p = final(t))}
 		
 		
@@ -35,29 +36,46 @@ TAD Tablero
 		// agregarPacman:
 		
 	Otras Operaciones:
-		posicionValida: posicion × tablero -> bool
-		esPared: posicion × tablero -> bool
-		esFantasma: posicion × tablero -> bool
+		posicionValida: posicion × mapa -> bool
+		esPared: posicion × mapa -> bool
+		esFantasma: posicion × mapa -> bool
 		
 	Axiomas:
-		// esVacio(tableroVacio(h,w,i,l)) ≡ true
+		// esVacio(mapaVacio(h,w,i,l)) ≡ true
 		// esVacio(agregarFantasma(p,t)) ≡ false
 		// esVacio(agregarPared(p,t)) ≡ false
 		
-		inicio(tableroVacio(h,w,i,l)) ≡ i
-		final(tableroVacio(h,w,i,l)) ≡ l
-		alto(tableroVacio(h,w,i,l)) ≡ h
-		ancho(tableroVacio(h,w,i,l)) ≡ w
+		inicio(mapaVacio(h,w,i,f)) ≡ i
+	  final(mapaVacio(h,w,i,f)) ≡ f
+		alto(mapaVacio(h,w,i,f)) ≡ h
+		ancho(mapaVacio(h,w,i,f)) ≡ w
 
-		
 		inicio(agregarFantasma(p, t)) ≡ inicio(t)
 		inicio(agregarPared(p, t)) ≡ inicio(t)
 		
+		final(agregarFantasma(p, t)) ≡ final(t)
+		final(agregarPared(p, t)) ≡ final(t)
 		
-		fantasmas(tableroVacio(h,w,i,l)) ≡ Ø
-		fantasmas(agregarFantasma(p2,t)) ≡ p ∪ fantasmas(t)
-		t = agregarFantasma(p1, tableroVacio)
-		t = tableroVacio
+		agregarPared(p, agregarFantasma(p, mapaVacio(f))))
+		mapaVacio
+		
+		fantasmas(mapaVacio(h,w,i,l)) ≡ Ø
+		fantasmas(agregarFantasma(p,t)) ≡ p ∪ fantasmas(t)
+		fantasmas(agregarPared(p,t)) ≡ fantasmas(t)
+		
+		paredes(mapaVacio(h,w,i,l)) ≡ Ø
+		paredes(agregarFantasma(p,t)) ≡ paredes(t)
+		paredes(agregarPared(p,t)) ≡ p ∪ paredes(t)
+		
+		alto(agregarFantasma(p,t)) ≡ alto(t)
+		alto(agregarPared(p,t)) ≡ alto(t)
+		
+		ancho(agregarFantasma(p,t)) ≡ ancho(t)
+		ancho(agregarPared(p,t)) ≡ ancho(t)
+		
+		
+		// t = agregarFantasma(p1, mapaVacio)
+		// t = mapaVacio
 		
 
 		
