@@ -8,15 +8,17 @@ TAD Pacman
 		movimientos: pacman -> secu(posicion)
 	
 	Generadores:
-		subir: {¬perdido}
-		bajar: {¬perdido}
-		izquierda: {¬perdido}
-		derecha: {¬perdido}
+		ubicar: tablero -> pacman
+		subir: pacman -> secu(posicion) 	   {¬perdido}
+		bajar: pacman -> secu(posicion) 	   {¬perdido}
+		izquierda: pacman -> secu(posicion)	 {¬perdido}
+		derecha: pacman -> secu(posicion) 	 {¬perdido}
 		
 	Otras Operaciones:
-		otra:	nombreTad t × nat n	-> bool 	{ n ≥ 1 }
-	Axiomas:
+		ultimaPos: pacman -> posicion
 		
+	Axiomas:
+		movimientos(ubicar(tablero)) ≡ <>
 		movimientos(bajar(pacman)) ≡ 
 		
 		

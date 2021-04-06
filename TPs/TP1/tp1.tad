@@ -5,8 +5,8 @@ TAD Juego
 	Usa: Bool, Nat, Pacman, Tablero
 	
 	Observadores Basicos:
-		ganada: juego -> bool   {tiene que haber comenzado}
-		perdida: juego -> bool  {tiene que haber comenzado}
+		ganada: juego -> bool   		{tiene que haber comenzado}
+		perdida: juego -> bool  		{tiene que haber comenzado}
 		tablero: juego -> tablero
 		comenzado: juego -> bool
 		pacman: juego -> pacman
