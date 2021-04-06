@@ -1,0 +1,415 @@
+PRÁCTICA #1.
+
+~ PARTE 1 ~
+Ejercicio 1.
+
+a) 
+
+duplicar: secu(α) -> secu(α) 
+
+duplicar(<>) ≡ <> 
+duplicar(x • s) ≡ x • x • duplicar(s)
+
+b)
+
+• ≤ • : sec(α) x sec(α) -> Bool 
+
+<> ≤ sec(α) ≡ true
+sec(α) ≤ <> ≡ false 
+x • s ≤ y • m ≡ if (x < y) then (true) 
+                    else 
+                        if (x = y) then (s ≤ m) 
+                            else false
+                        fi             
+                fi   
+
+c)
+
+reverso: secu(α) -> secu(α)
+
+reverso(<>) ≡ <>
+reverso(s) ≡ ult(s) • com(s) 
+
+d)
+
+capicúa: sec(α) -> Bool
+
+capicúa(s) ≡ s =obs reverso(s)
+
+e)
+
+esPrefijo: sec(α) x sec(α) -> Bool
+    --esPrefijo(s,m) indica si s es prefijo de m.
+
+esPrefijo(<>, s) ≡ true
+esPrefijo(s, <>) ≡ false
+esPrefijo(x • s, y • m) ≡ x =obs y ∧L esPrefijo(s,m)
+
+f)
+
+buscar: sec(α) x sec(α) -> nat
+
+buscar(m, <>) ≡ if (m ¬=obs <>) then ⟂ else 0
+buscar(m, x • s) ≡ 	if esPrefijo(m, x • s) then 0  
+											else 1 + buscar(m, s) 
+										fi 
+
+g)
+
+ordenada: sec(α) -> Bool
+
+ordenada(x • <>) ≡ true
+ordenada(x • y • s) ≡ vacia?(x • y • s) ∨L x ≤ y ∧ ordenada(y • s)
+ 
+h)
+ 
+insertarOrdenada: α x sec(α) s -> sec(α)					{ordenada(s)}
+
+insertarOrdenada(a, <>) ≡ a • <>
+insertarOrdenada(a, x • y • s) ≡	if x ≤ a ∧ y > a  then
+																			x • a • s 
+																		else
+																			x • insertarOrdenada(a, s) 
+																	fi
+
+i) 
+
+cantidadApariciones: α x sec(α) -> nat
+ 
+cantidadApariciones(a,<>) ≡ 0
+cantidadApariciones(a, x • s) ≡ if a =obs x  then 1 else 0 fi + cantidadApariciones(a,s)
+
+j)
+
+esPermutacion: sec(α) x sec(α) -> Bool 
+
+esPermutacion(<>,<>) ≡ true
+esPermutacion(x • s, y • m) ≡ long(x • s) =obs long(y • m) ∧L 
+															cantidadApariciones(x, x • s) =obs cantidadApariciones(y, y • m) ∧L
+															esPermutacion(s, m)
+															
+k)
+
+combinar: sec(α) m x sec(α) s -> sec(α)					{ordenada(s), ordenada(m)}
+
+combinar(<>, m) ≡ m
+combinar(x • s, m) ≡ combinar(s, insertarOrdenada(x,m) )
+
+
+
+Ejercicio 2.
+
+a) 
+
+#Hojas:  ab(α) -> Nat
+
+#Hojas(nil) ≡ 0
+#Hojas(a) ≡ if esHoja(a) then 1 else #Hojas(izq(a)) + #Hojas(der(a)) fi
+
+b)
+
+degeneradoAIzquierda: ab(α) -> Bool
+
+degeneradoAIzquierda(nil) ≡ true
+degeneradoAIzquierda(bin(a,e,b)) ≡ if nil?(b) then
+																			degeneradoAIzquierda(a)
+																		else
+																			false
+																		fi
+																		
+c) 
+
+zigZag: ab(α) -> nat
+
+zigZag(nil) ≡ true
+zigZag(bin(a,e,b)) ≡ 	if nil?(b) then 
+													(nil?(izq(a)) ∧ zigZag(a)) 
+												else 
+													if nil?(a) then
+															nil?(der(b)) ∧ zigZag(b)
+														else
+															false
+													fi
+											fi
+											
+d)
+
+ultimoNivelCompleto: ab(α) -> nat
+
+ultimoNivelCompleto(nil) ≡ 0
+ultimoNivelCompleto(bin(a,e,b)) ≡ if ¬nil(a) ∧ ¬nil(b) then
+																		1 + min(ultimoNivelCompleto(a), ultimoNivelCompleto(b)) 
+																	else
+																	 	0
+																	fi
+																	
+e)
+
+espejo: ab(α) -> ab(α)
+
+espejo(nil) ≡ nil
+espejo(bin(a,e,b)) ≡ bin(espejo(b),e,espejo(a))
+
+f)
+
+esSimetrico: ab(α) -> Bool
+esSimetrico(a) ≡ espejo(a) =obs a
+
+
+
+Ejercicio 3.
+
+a) 
+
+agregarATodos: α x conj(conj(α)) -> conj(conj(α))
+agregarATodos(x, S) ≡ if vacio?(S) then Ø else Ag(x, dameUno(S)) ∪ agregarTodos(x, S - dameUno(S)) fi 
+
+partesDe: conj(α) -> conj(conj(α))
+// b ⊆ a ↔ b ∈ partesDe(a) ≡ true
+
+partesDe(S) ≡ if vacio?(S) then Ø else agregarATodos(dameUno(S), partesDe(S-dameUno(S))) ∪ partesDe(S-dameUno(S)) fi
+
+b)
+
+combinacionesDeK: k x conj(α) c -> conj(conj(α)) 						{k <= #c}
+
+// b ⊆ combinacionesDeK(C) ↔ ( b ∈ partesDe(C) ∧ #b = k) ≡ true
+combinacionesDeK(k,Ø) ≡ {Ø}
+combinacionesDeK(k, c) ≡ 	if ¬ #dameUno(partesDe(c)) =obs k then 
+														combinacionesDeK(c - dameUno(partesDe(c))) 
+													else
+													 	dameUno(partesDe(c)) ∪ combinacionesDeK(c - dameUno(partesDe(c)))
+													fi 
+
+
+
+
+
+
+
+
+Ejercicio 4.
+// FALTA
+// subsecuencias: secu(α) -> secu(secu(α))
+// 
+// subsecuencias(x • <>) ≡ x • <>
+// subsecuencias(x • s) ≡ agregarTodos(x, subsecuencias(s))
+
+
+Ejercicio 5.
+
+a) 
+
+nivelNormal: Int k x at(α) -> Bool				{k >= 0}
+
+nivelNormal(k, nil) ≡ true
+nivelNormal(0, tern(a,b,c,e)) ≡ ¬ (nil?(a) ∧ nil?(b) ∧ nil?(c)) 
+nivelNormal(k, tern(a,b,c,e)) ≡ nivelNormal(k-1, a) ∧ nivelNormal(k-1, b) ∧ nivelNormal(k-1, c) ∧ 
+
+b)
+//Me devuelve el máximo nivel alcanzado
+maxNivel(nil) ≡ 0
+maxNivel(tern(a,b,c,e)) ≡ máx(1+maxNivel(a), 1+maxNivel(b), 1+maxNivel(c))
+//Dado un K, me devuelve cuántos nodos hay en el k-esimo nivel.
+nodoBinario(a) ≡ if nil?(a) then 0 else 1 fi 
+nodosK(k,nil) ≡ 0
+nodosK(0,tern(a,b,c,e)) ≡ nodoBinario(a) + nodoBinario(b) + nodoBinario(c)  
+nodosK(k, tern(a,b,c,e)) ≡ nodosK(k-1,a) + nodosK(k-1,b) + nodosK(k-1,c)
+
+acotado: Int x at(α) -> Bool
+
+acotadoAux(0,k,a) ≡ nodosK(0,a) ≤ k
+acotadoAux(nivel,k,a) ≡ nodosK(nivel, a) ≤ k ∧ acotadoAux(nivel-1,k,a)
+acotado(k, a) ≡ acotadoAux(maxNivel(a),k,a)  
+
+
+
+Ejercicio 6.
+
+a) 
+
+alturaSecu: secu(rosetree(α)) -> Nat
+alturaSecu(<>) ≡ 0
+alturaSecu(x • s) ≡ max{altura(x), alturaSecu(s)}
+
+altura: rosetree(α) -> Nat
+altura(rose(a,s)) ≡ 1 + alturaSecu(s)
+
+b)
+
+#Hojas: rosetree(α) -> int
+#Hojas(rose(a, rs)) ≡ #HojasSecu(rs)
+
+#HojasSecu: secu(rose(α)) -> int
+#HojasSecu(<>) ≡ 1
+#HojasSecu(x • s) ≡ #Hojas(x) + #HojasSecu(s)
+
+c)
+
+podarSecu: secu(rosetree(α)) -> secu(rosetree(α))
+podarSecu(<>) ≡ <>
+podarSecu(x • s) ≡ podar(x) • podarSecu(s)
+
+podar: rosetree(α) -> rosetree(α)
+podar(rose(a,<>)) ≡ <>
+podar(rose(a,s)) ≡ rose(a, podarSecu(s))
+
+d)
+ramasSecu: secu(rosetree(α)) -> secu(secu(α))
+ramasSecu(<>) ≡ <>
+ramasSecu(x • s) ≡ ramas(x) • ramasSecu(s)
+
+ramas: rosetree(α) -> secu(secu(α))
+ramas(a, <>) ≡ (a • <>) • <>
+ramas(rose(a,s)) ≡ agregarATodos(a,ramasSecu(s))
+
+// FALTA
+
+e) 
+// FALTA
+
+f) 
+// FALTA
+
+
+
+
+~ PARTE 2 ~
+
+Ejercicio 7.
+
+TAD Polinomio
+	Igualdad Observacional:
+	Generos: polinomio
+
+	Observadores Basicos:
+		evaluar:	polinomio × nat	-> nat 	
+	Generadores:
+		cte   : nat -> polinomio
+		X     : -> polinomio
+		• + • : polinomio x polinomio -> polinomio
+		• . • : polinomio x polinomio -> polinomio
+	Otras Operaciones:
+		esRaiz:	polinomio x nat	-> bool
+	Axiomas:
+		evaluar(cte(e),m) ≡ e
+		evaluar(X, n) ≡ n
+		evaluar(X + Y, n) ≡ evaluar (X,n) + evaluar(Y,n)
+		evaluar(X . Y, n) ≡ evaluar(X,n) * evaluar(Y,n)
+		
+		esRaiz(X, n) ≡ evaluar(x,n) = 0
+Fin TAD
+
+
+
+Ejercicio 8.
+
+TAD NombreTad
+	Igualdad Observacional:
+	Generos: robot
+
+	Observadores Basicos:
+		trayectoria:	robot -> secu(coordenada)
+	Generadores:
+		ubicar:	coordenada -> robot
+		arriba: robot -> robot
+		abajo: robot -> robot
+		derecha: robot -> robot
+		izquerda: robot -> robot
+		
+	Otras Operaciones:
+		posicionActual: robot -> coordenada
+		cuantasVecesPaso: coordenada x robot -> nat
+		masALaDerecha: robot -> coordenada
+		cantidadApariciones: coordenada x secu(coordenada) -> nat
+		maxSecu: coordenada x secu(coordenada) -> coordenada
+		
+	Axiomas:
+		posicionActual(r) ≡ prim(trayectoria(r))
+		trayectoria(ubicar(c)) ≡ c • <>
+		trayectoria(arriba(r)) ≡  < π1(posicionActual(r)), π2(posicionActual(r)) + 1 > • trayectoria(r)
+		trayectoria(abajo(r)) ≡  < π1(posicionActual(r)), π2(posicionActual(r)) - 1 > • trayectoria(r)
+		trayectoria(izquerda(r)) ≡  < π1(posicionActual(r)) - 1, π2(posicionActual(r)) > • trayectoria(r)
+		trayectoria(derecha(r)) ≡  < π1(posicionActual(r)) + 1, π2(posicionActual(r)) > • trayectoria(r)
+		
+		cantidadApariciones(x, <>) = 0
+		cantidadApariciones(c, x • s) ≡ if c = x then 
+																			1 + cantidadApariciones(c, s)
+																		else
+																			0 + cantidadApariciones(c,s)
+																		fi
+		cuantasVecesPaso(c, r) ≡ cantidadApariciones(c, trayectoria(r))
+
+		maxSecu(c, <>) ≡ c
+		maxSecu(c, x • s) ≡ if π1(c) > π1(x) then maxSecu(c, s) else maxSecu(x, s) 
+		
+		masALaDerecha(c, r) ≡ maxSecu(c, trayectoria(r))
+		
+Fin TAD
+
+
+
+Ejercicio 9.
+
+TAD Electroimán
+	Igualdad Observacional:
+	Generos: electroimán
+	
+	Observadores Basicos:
+		cinta: electroimán -> cinta 
+		imanPrendido: electroimán -> bool
+		imanCargado: electroimán e -> bool 		{imanPrendido(e)}
+		
+	Generadores:
+		arrancar: cinta -> electroimán
+		prender: electroimán e -> electroimán 		{¬imanPrendido(e)}
+		apagar: electroimán e -> electroimán 		{imanPrendido(e) ∧L (imanCargado(e) → ¬celdaActualOcupada(e))}
+		<-: electroimán -> electroimán
+		->: electroimán -> electroimán
+		
+	Otras Operaciones:
+		celdaActualOcupada: electroimán -> bool
+		#giros<-: electroimán -> nat 
+		#giros->: electroimán -> nat 
+			
+	Axiomas:
+		cinta(arrancar(c)) ≡ c
+		cinta(prender(e)) ≡  cinta(e)
+		cinta(apagar(e)) ≡ cinta(e)
+		cinta(->(e)) ≡ ->cinta(e)
+		cinta(<-(e)) ≡ <-cinta(e)
+		
+		imanPrendido(arrancar(c)) ≡ false
+		imanPrendido(prender(e)) ≡ true
+		imanPrendido(apagar(e)) ≡ false
+		imanPrendido(<-(e)) ≡ imanPrendido(e)
+		imanPrendido(->(e)) ≡  
+
+	
+Fin TAD
+
+TAD Cinta
+	Generos: cinta
+	
+	Observadores Basicos:
+		#celdas: cinta -> nat
+		celdaOcupada?: nat n x cinta c -> bool 		{n < #celdas(c)}
+		#giros<-: cinta -> nat
+		#giros->: cinta -> nat
+		
+	Generadores:
+		arrancar: nat n -> cinta 		{n > 0}
+		ponerElem: cinta c -> cinta {¬celdaActualOcupada?(c)}
+		sacarElem: cinta c -> cinta {celdaActualOcupada?(c)}
+		->: cinta -> cinta
+		<-: cinta -> cinta
+		
+	Otras Operaciones:
+		celdaActualOcupada: cinta -> bool
+		#elem: cinta -> nat
+		
+	Axiomas:
+		obs?(nil)	= 	true
+		otra(t, n)	= 	n
+		...
+Fin TAD

@@ -1,0 +1,84 @@
+TAD Tablero
+	Igualdad Observacional:
+	Generos: tablero
+	Exporta: tablero, observadores, generadores, posicion, conj(α)
+	Usa: Bool, Nat, posicion
+	
+	Observadores Basicos:
+		// esVacio: tablero -> bool
+		inicio: tablero -> posicion
+		final: tablero -> posicion
+		fantasmas: tablero -> conj(posicion)
+		// pacman: tablero -> posicion
+		paredes: tablero -> conj(posicion)
+		alto: tablero -> nat
+		ancho: tablero -> nat
+		
+		
+	Generadores:
+	
+		// nuevoPacman:	inicio -> tablero
+		
+		// tableroVacio: -> tablero
+		// agregarFila: nat -> tablero
+		
+		//PREGUNTAR SI TABLERO VACIO ESTÁ BIEN.
+		tableroVacio: nat × nat × posicion × posicion -> tablero 
+		agregarFantasma: posicion p × tablero t -> tablero 
+												{posicionValida ∧ ¬esPared(p, t) ∧ ¬esFantasma(p, t) ∧ ¬(p = inicio(t))
+												∧ ¬(p = final(t))}
+		agregarPared: posicion × tablero -> tablero 
+		                    {posicionValida ∧ ¬esPared(p, t) ∧ ¬esFantasma(p, t) ∧ ¬(p = inicio(t))
+												∧ ¬(p = final(t))}
+		
+		
+		
+		// agregarPacman:
+		
+	Otras Operaciones:
+		posicionValida: posicion × tablero -> bool
+		esPared: posicion × tablero -> bool
+		esFantasma: posicion × tablero -> bool
+		
+	Axiomas:
+		// esVacio(tableroVacio(h,w,i,l)) ≡ true
+		// esVacio(agregarFantasma(p,t)) ≡ false
+		// esVacio(agregarPared(p,t)) ≡ false
+		
+		inicio(tableroVacio(h,w,i,l)) ≡ i
+		final(tableroVacio(h,w,i,l)) ≡ l
+		alto(tableroVacio(h,w,i,l)) ≡ h
+		ancho(tableroVacio(h,w,i,l)) ≡ w
+
+		
+		inicio(agregarFantasma(p, t)) ≡ inicio(t)
+		inicio(agregarPared(p, t)) ≡ inicio(t)
+		
+		
+		fantasmas(tableroVacio(h,w,i,l)) ≡ Ø
+		fantasmas(agregarFantasma(p2,t)) ≡ p ∪ fantasmas(t)
+		t = agregarFantasma(p1, tableroVacio)
+		t = tableroVacio
+		
+
+		
+		
+		posicionValida(p, t) 
+		
+		1 0 1
+		# # # 
+		# # #
+		
+Fin TAD
+
+	TAD Posicion es Tupla(Natural x Natural)
+
+
+
+[
+ [F,1,0,0],
+ [0,0,0,1],
+ [0,1,0,0],
+ [0,0,0,0],
+ [I,1,0,0]    
+]

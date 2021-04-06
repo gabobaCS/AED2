@@ -1,0 +1,25 @@
+TAD Pacman
+	Igualdad Observacional:
+	Generos: pacman
+	Exporta: pacman, observadores, generadores, 
+	Usa: Bool, Nat, Tablero
+	
+	Observadores Basicos:
+		movimientos: pacman -> secu(posicion)
+	
+	Generadores:
+		subir: {¬perdido}
+		bajar: {¬perdido}
+		izquierda: {¬perdido}
+		derecha: {¬perdido}
+		
+	Otras Operaciones:
+		otra:	nombreTad t × nat n	-> bool 	{ n ≥ 1 }
+	Axiomas:
+		
+		movimientos(bajar(pacman)) ≡ 
+		
+		
+		(π1(ultimaPos(pacman)), π2(ultimaPos(pacman) - 1)) • posiciones(pacman) 
+		...
+Fin TAD

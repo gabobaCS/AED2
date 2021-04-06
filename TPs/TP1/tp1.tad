@@ -1,0 +1,31 @@
+TAD Juego
+	Igualdad Observacional:
+	Generos: juego
+	Exporta: juego, observadores, generadores, 
+	Usa: Bool, Nat, Pacman, Tablero
+	
+	Observadores Basicos:
+		ganada: juego -> bool   {tiene que haber comenzado}
+		perdida: juego -> bool  {tiene que haber comenzado}
+		tablero: juego -> tablero
+		comenzado: juego -> bool
+		pacman: juego -> pacman
+		// pacman: juego -> tupla(nat)  (posicion actual del pacman)
+		 
+	Generadores:
+		iniciarPartida: tablero × pacman -> juego
+		terminarPartida: tablero x pacman -> juego
+		
+		
+		
+	Otras Operaciones:
+		donde esta el pacman?: juego × pacman -> posicion
+		estaA3: juego × pacman -> bool
+		
+		agregarFantasma:
+		agregarPared:
+	Axiomas:
+	ganada(iniciarPartida) ≡ false
+	perdida(iniciarPartida) ≡ false
+	ganada(subir) ≡ 
+Fin TAD
