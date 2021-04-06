@@ -1,4 +1,4 @@
-TAD Tablero
+TAD Tablero 
 	Igualdad Observacional:
 	Generos: tablero
 	Exporta: tablero, observadores, generadores, posicion, conj(α)
@@ -14,7 +14,6 @@ TAD Tablero
 		alto: tablero -> nat
 		ancho: tablero -> nat
 		
-		
 	Generadores:
 	
 		// nuevoPacman:	inicio -> tablero
@@ -23,8 +22,8 @@ TAD Tablero
 		// agregarFila: nat -> tablero
 		
 		//PREGUNTAR SI TABLERO VACIO ESTÁ BIEN.
-		tableroVacio: nat × nat × posicion × posicion -> tablero 
-		agregarFantasma: posicion p × tablero t -> tablero 
+		tableroVacio: nat a × nat b × posicion i × posicion f -> tablero  {¬(i = f) ∧ πi) <= a ∧ π2(f) <= b)(tablero) < b y }
+		agregarFantasma: posicion p × tablero t -> tablero
 												{posicionValida ∧ ¬esPared(p, t) ∧ ¬esFantasma(p, t) ∧ ¬(p = inicio(t))
 												∧ ¬(p = final(t))}
 		agregarPared: posicion × tablero -> tablero 
@@ -73,6 +72,11 @@ Fin TAD
 
 	TAD Posicion es Tupla(Natural x Natural)
 
+
+
+[i,1,0,0,0]
+[0,0,1,0,0]
+[0,f,ll,0,0]
 
 
 [
